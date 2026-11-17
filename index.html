@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudySphere</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f3fa;
+    color: #29243a;
+    padding: 25px;
+}
+
+.container {
+    max-width: 650px;
+    margin: auto;
+}
+
+h1 {
+    color: #7254a8;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 12px #00000008;
+}
+
+h2 {
+    font-size: 19px;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 9px;
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+button {
+    background: #8061b5;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #674899;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    background: #f5f1fa;
+    padding: 13px;
+    margin-top: 10px;
+    border-radius: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+li.done span {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.delete {
+    background: #d96b79;
+    padding: 7px 10px;
+}
+
+.stats {
+    font-size: 24px;
+    color: #8061b5;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    color: #999;
+    margin-top: 25px;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>StudySphere ✨</h1>
+    <p class="subtitle">Your little space to grow every day.</p>
+
+    <div class="card">
+        <h2>Today's Progress</h2>
+        <p class="stats" id="progress">0 / 0</p>
+        <p>Tasks completed</p>
+    </div>
+
+    <div class="card">
+        <h2>Add a Learning Task</h2>
+
+        <input
+            type="text"
+            id="taskInput"
+            placeholder="What do you want to learn?"
+        >
+
+        <button onclick="addTask()">Add Task +</button>
+    </div>
+
+    <div class="card">
+        <h2>My Tasks</h2>
+        <ul id="taskList"></ul>
+    </div>
+
+    <footer>
+        Built with curiosity and consistency 💜
+    </footer>
+
+</div>
+
+<script>
+let tasks = [];
+
+function addTask() {
+    const input = document.getElementById("taskInput");
+    const taskName = input.value.trim();
+
+    if (taskName === "") {
+        alert("Please enter a task!");
+        return;
+    }
+
+    tasks.push({
+        name: taskName,
+        completed: false
+    });
+
+    input.value = "";
+
+    displayTasks();
+}
+
+function completeTask(index) {
+    tasks[index].completed = !tasks[index].completed;
+    displayTasks();
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    displayTasks();
+}
+
+function displayTasks() {
+    const list = document.getElementById("taskList");
+    list.innerHTML = "";
+
+    tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+
+        if (task.completed) {
+            li.classList.add("done");
+        }
+
+        li.innerHTML = `
+            <span onclick="completeTask(${index})">
+                ${task.completed ? "✅" : "⬜"}
+                ${task.name}
+            </span>
+
+            <button class="delete"
+                onclick="deleteTask(${index})">
+                Delete
+            </button>
+        `;
+
+        list.appendChild(li);
+    });
+
+    const completed = tasks.filter(
+        task => task.completed
+    ).length;
+
+    document.getElementById("progress").textContent =
+        completed + " / " + tasks.length;
+}
+</script>
+
+</body>
+</html>
